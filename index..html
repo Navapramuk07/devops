@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-vote-yea"></i>
+                <h1>VoteSecure</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><button id="loginBtn" class="login-btn">Login</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Landing Page -->
+        <section id="landingPage" class="landing-page">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Secure Digital Voting Platform</h2>
+                    <p>Your voice matters. Vote securely and transparently in the digital age.</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <h3 id="totalVoters">0</h3>
+                            <p>Registered Voters</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalVotes">0</h3>
+                            <p>Votes Cast</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="activeElections">1</h3>
+                            <p>Active Elections</p>
+                        </div>
+                    </div>
+                    <button id="getStartedBtn" class="cta-button">Get Started</button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <section class="features">
+                <div class="container">
+                    <h3>Why Choose VoteSecure?</h3>
+                    <div class="features-grid">
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Secure Voting</h4>
+                            <p>End-to-end encryption ensures your vote remains private and secure.</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-eye"></i>
+                            <h4>Transparent Process</h4>
+                            <p>Real-time results and transparent vote counting process.</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h4>Easy Access</h4>
+                            <p>Vote from anywhere using any device with internet connection.</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Verified Results</h4>
+                            <p>Blockchain-based verification ensures vote integrity.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Login to Vote</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="voterId">Voter ID:</label>
+                        <input type="text" id="voterId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="captcha">Enter Captcha:</label>
+                        <div class="captcha-container">
+                            <canvas id="captchaCanvas" width="150" height="50"></canvas>
+                            <button type="button" id="refreshCaptcha">↻</button>
+                        </div>
+                        <input type="text" id="captchaInput" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+                <div class="register-link">
+                    <p>Don't have an account? <a href="#" id="registerLink">Register here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Modal -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Voter Registration</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" min="18" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Password:</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Voting Page -->
+        <section id="votingPage" class="voting-page" style="display: none;">
+            <div class="container">
+                <div class="voting-header">
+                    <h2>General Election 2025</h2>
+                    <div class="voter-info">
+                        <p>Welcome, <span id="voterName">Voter</span></p>
+                        <button id="logoutBtn" class="logout-btn">Logout</button>
+                    </div>
+                </div>
+
+                <div class="voting-instructions">
+                    <h3>Voting Instructions</h3>
+                    <ul>
+                        <li>Select one candidate for each position</li>
+                        <li>Review your choices before submitting</li>
+                        <li>Click "Cast Vote" to submit your ballot</li>
+                        <li>You can only vote once per election</li>
+                    </ul>
+                </div>
+
+                <div class="ballot">
+                    <div class="position">
+                        <h4>President</h4>
+                        <div class="candidates">
+                            <div class="candidate">
+                                <input type="radio" name="president" value="candidate1" id="pres1">
+                                <label for="pres1">
+                                    <img src="https://via.placeholder.com/80x80" alt="Candidate 1">
+                                    <div class="candidate-info">
+                                        <h5>John Smith</h5>
+                                        <p>Democratic Party</p>
+                                        <p>Experience: Former Governor, 15 years in politics</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="candidate">
+                                <input type="radio" name="president" value="candidate2" id="pres2">
+                                <label for="pres2">
+                                    <img src="https://via.placeholder.com/80x80" alt="Candidate 2">
+                                    <div class="candidate-info">
+                                        <h5>Jane Doe</h5>
+                                        <p>Republican Party</p>
+                                        <p>Experience: Former Senator, 12 years in politics</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="candidate">
+                                <input type="radio" name="president" value="candidate3" id="pres3">
+                                <label for="pres3">
+                                    <img src="https://via.placeholder.com/80x80" alt="Candidate 3">
+                                    <div class="candidate-info">
+                                        <h5>Mike Johnson</h5>
+                                        <p>Independent</p>
+                                        <p>Experience: Business Leader, First-time candidate</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position">
+                        <h4>Vice President</h4>
+                        <div class="candidates">
+                            <div class="candidate">
+                                <input type="radio" name="vicepresident" value="vp1" id="vp1">
+                                <label for="vp1">
+                                    <img src="https://via.placeholder.com/80x80" alt="VP Candidate 1">
+                                    <div class="candidate-info">
+                                        <h5>Sarah Wilson</h5>
+                                        <p>Democratic Party</p>
+                                        <p>Experience: Former Attorney General</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="candidate">
+                                <input type="radio" name="vicepresident" value="vp2" id="vp2">
+                                <label for="vp2">
+                                    <img src="https://via.placeholder.com/80x80" alt="VP Candidate 2">
+                                    <div class="candidate-info">
+                                        <h5>Robert Brown</h5>
+                                        <p>Republican Party</p>
+                                        <p>Experience: Former Military General</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="candidate">
+                                <input type="radio" name="vicepresident" value="vp3" id="vp3">
+                                <label for="vp3">
+                                    <img src="https://via.placeholder.com/80x80" alt="VP Candidate 3">
+                                    <div class="candidate-info">
+                                        <h5>Lisa Anderson</h5>
+                                        <p>Independent</p>
+                                        <p>Experience: Tech Entrepreneur</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="voting-actions">
+                    <button id="reviewVoteBtn" class="review-btn">Review Vote</button>
+                    <button id="castVoteBtn" class="cast-vote-btn" disabled>Cast Vote</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vote Confirmation Modal -->
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <h2>Vote Confirmation</h2>
+                <div id="voteReview"></div>
+                <div class="confirmation-actions">
+                    <button id="confirmVoteBtn" class="confirm-btn">Confirm & Submit</button>
+                    <button id="editVoteBtn" class="edit-btn">Edit Vote</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <section id="resultsPage" class="results-page" style="display: none;">
+            <div class="container">
+                <h2>Election Results</h2>
+                <div class="results-container">
+                    <div class="result-section">
+                        <h3>President</h3>
+                        <div class="result-bars">
+                            <div class="result-bar">
+                                <span class="candidate-name">John Smith (Democratic)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="45"></div>
+                                </div>
+                                <span class="percentage">45%</span>
+                            </div>
+                            <div class="result-bar">
+                                <span class="candidate-name">Jane Doe (Republican)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="35"></div>
+                                </div>
+                                <span class="percentage">35%</span>
+                            </div>
+                            <div class="result-bar">
+                                <span class="candidate-name">Mike Johnson (Independent)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="20"></div>
+                                </div>
+                                <span class="percentage">20%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <h3>Vice President</h3>
+                        <div class="result-bars">
+                            <div class="result-bar">
+                                <span class="candidate-name">Sarah Wilson (Democratic)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="42"></div>
+                                </div>
+                                <span class="percentage">42%</span>
+                            </div>
+                            <div class="result-bar">
+                                <span class="candidate-name">Robert Brown (Republican)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="38"></div>
+                                </div>
+                                <span class="percentage">38%</span>
+                            </div>
+                            <div class="result-bar">
+                                <span class="candidate-name">Lisa Anderson (Independent)</span>
+                                <div class="bar">
+                                    <div class="fill" data-percentage="20"></div>
+                                </div>
+                                <span class="percentage">20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-summary">
+                    <h3>Election Summary</h3>
+                    <div class="summary-stats">
+                        <div class="stat">
+                            <h4>Total Votes Cast</h4>
+                            <p id="totalVotesCast">1,234,567</p>
+                        </div>
+                        <div class="stat">
+                            <h4>Voter Turnout</h4>
+                            <p>78.5%</p>
+                        </div>
+                        <div class="stat">
+                            <h4>Election Status</h4>
+                            <p class="status-active">Live Results</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="backToVotingBtn" class="back-btn">Back to Voting</button>
+            </div>
+        </section>
+
+        <!-- Thank You Page -->
+        <section id="thankYouPage" class="thank-you-page" style="display: none;">
+            <div class="container">
+                <div class="thank-you-content">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Thank You for Voting!</h2>
+                    <p>Your vote has been successfully recorded and encrypted.</p>
+                    <div class="vote-receipt">
+                        <h3>Vote Receipt</h3>
+                        <p><strong>Transaction ID:</strong> <span id="transactionId"></span></p>
+                        <p><strong>Date:</strong> <span id="voteDate"></span></p>
+                        <p><strong>Time:</strong> <span id="voteTime"></span></p>
+                        <p><strong>Status:</strong> <span class="status-success">Confirmed</span></p>
+                    </div>
+                    <div class="next-steps">
+                        <h3>What's Next?</h3>
+                        <ul>
+                            <li>Your vote is now part of the secure blockchain</li>
+                            <li>Results will be available after the election period ends</li>
+                            <li>You will receive an email confirmation shortly</li>
+                        </ul>
+                    </div>
+                    <div class="thank-you-actions">
+                        <button id="viewResultsBtn" class="results-btn">View Live Results</button>
+                        <button id="downloadReceiptBtn" class="download-btn">Download Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>VoteSecure</h4>
+                    <p>Empowering democracy through secure digital voting.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#help">Help</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: support@votesecure.com</p>
+                    <p>Phone: 1-800-VOTE-NOW</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VoteSecure. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
